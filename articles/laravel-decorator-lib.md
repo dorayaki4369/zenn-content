@@ -9,6 +9,8 @@ published: true
 # はじめに
 [Laravel](https://laravel.com)で使用できるデコレーターライブラリを作り、[packagist](https://packagist.org/packages/dorayaki4369/laravel-decorator)に公開しました。
 
+https://github.com/dorayaki4369/laravel-decorator
+
 このライブラリを作ったきっかけは、**サービスクラスなどで共通の処理（ログ出力やトランザクション管理など）をスマートに書きたかった**からです。Laravelでは、こうした処理をミドルウェアやイベントで書くこともできますが、メソッド単位で柔軟に適用したい場面も多く、うまくはまらないことがよくありました。
 そこで注目したのがデコレーターパターンと、PHP8から導入された[アトリビュート](https://www.php.net/manual/ja/language.attributes.overview.php)の組み合わせです。
 
