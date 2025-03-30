@@ -3,7 +3,7 @@ title: "Laravelで使えるデコレータライブラリを作った"
 emoji: "🖼️"
 type: "tech"
 topics: ["PHP", "Laravel", "decorator"]
-published: false
+published: true
 ---
 
 # はじめに
