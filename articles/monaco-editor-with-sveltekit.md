@@ -60,22 +60,20 @@ pnpm add monaco-editor monaco-yaml
 ## Editorコンポーネントの作成
 
 Monaco Editorをラップする`Editor.svelte`コンポーネントを作成します。
-完成系ですが、以下のようになりました。
+いきなりですが、完成系は以下のようになりました。
 
 https://github.com/dorayaki4369/monaco-editor-with-sveltekit/blob/main/src/lib/components/Editor.svelte
 
-実装ポイントとして、このコンポーネントは全体的に以下のような構成で実装しました。
+実装ポイントとして、このコンポーネントは全体的に以下のような構成で実装しています。
 
-1. global stateのthemeをインポート
+1. global stateの`theme`をインポート
 2. propsの定義
 3. 内部で使用する変数の定義（初期化はしない）
 4. Monaco Editor初期化関数
 5. Monaco Editor初期化関数を実行する`onMount`
 6. プロパティ変更時に実行されるMonaco Editorの状態を変えるスクリプト
 
-重要なのは、**Monaco Editorはクライアントサイドで確実に初期化されるようにすること**と、**プロパティの変更をMonaco Editorに反映させる関数の実装**です。
-
-```svelte
+```html
 <script lang="ts">
   import type * as monaco from "monaco-editor";
   import { onMount } from "svelte";
@@ -112,12 +110,16 @@ https://github.com/dorayaki4369/monaco-editor-with-sveltekit/blob/main/src/lib/c
 <div id="editor" bind:this={container} {...props} class={props.class}></div>
 ```
 
+重要なのは、**Monaco Editorはクライアントサイドで確実に初期化されるようにすること**と、**プロパティの変更をMonaco Editorに反映させる関数の実装**です。
+
 それぞれのポイントは以下のとおりです。
 
 ### 1. global stateの`theme`をインポート
 
 このサンプルアプリでは、　ユーザーによって任意に変えられるLight/Darkテーマの切り替え機能の状態管理を、別モジュールの`$lib/theme.svelte.ts`ファイルにて行なっています。
 `theme`変数を読み込み、Monaco Editorのテーマを切り替えられるようにします。
+
+https://github.com/dorayaki4369/monaco-editor-with-sveltekit/blob/ff3ce2ff79341689e38ee1b9ab1f6597bdd05f80/src/lib/components/Editor.svelte#L4
 
 ### 2. propsの定義
 
@@ -132,6 +134,8 @@ https://github.com/dorayaki4369/monaco-editor-with-sveltekit/blob/ff3ce2ff793416
 内部で使用する変数として、エディタのコンテナとなるDOMエレメントの変数である`container`、エディタの変数である`editor`、`monaco`変数の3つがあります。
 
 これらの変数は、`container`を除き、`onMount`変数で初期化され、`$effect`関数内で使用されます。
+
+https://github.com/dorayaki4369/monaco-editor-with-sveltekit/blob/ff3ce2ff79341689e38ee1b9ab1f6597bdd05f80/src/lib/components/Editor.svelte#L16-L18
 
 ### 4. Monaco Editor初期化関数
 
@@ -148,10 +152,14 @@ Monaco Editorの初期化を行う関数を定義します。
 また、`onDidChangeModelContext`関数に、エディタで更新されたテキスト内容をbindingされた`value`に代入するリスナーを登録しています。
 これによって、エディタの最新のテキスト内容を親コンポーネントに伝えることができるようになっています。
 
+https://github.com/dorayaki4369/monaco-editor-with-sveltekit/blob/ff3ce2ff79341689e38ee1b9ab1f6597bdd05f80/src/lib/components/Editor.svelte#L47-L93
+
 ### 5. Monaco Editor初期化関数を実行する`onMount`
 
 先ほど定義した初期化関数を`onMount`で実行します。
 また、戻り値でMonaco Editorをdisposeする関数を返すことで、このコンポーネントが使用されなくなったタイミングでMonaco Editorもクリーンアップされるようになります。
+
+https://github.com/dorayaki4369/monaco-editor-with-sveltekit/blob/ff3ce2ff79341689e38ee1b9ab1f6597bdd05f80/src/lib/components/Editor.svelte#L47-L93
 
 ### 6. プロパティ変更時に実行されるMonaco Editorの状態を変えるスクリプト
 
@@ -167,4 +175,4 @@ https://github.com/dorayaki4369/monaco-editor-with-sveltekit/blob/ff3ce2ff793416
 本記事ではSvelteKitとMonaco Editorを組み合わせてみたところを記事にしました。
 今回の実装だと対応言語は少ないですが、ブラウザ上で手軽にVS Codeと同じエディタが動くのはとても良いですね！
 
-ゆくゆくはLSPサーバーに接続して対応言語を増やしてみたいと思います。
+この実装の発展系として、LSPサーバーに接続して対応言語を増やしてみたいと思います。
